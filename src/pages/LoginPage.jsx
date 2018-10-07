@@ -1,24 +1,23 @@
-import React, { Component } from 'react';
-import Auth from '../modules/Auth';
-import { Link, Redirect } from 'react-router-dom';
+import React, { Component } from "react";
+import Auth from "../modules/Auth";
+import { Link, Redirect } from "react-router-dom";
 
 class LoginPage extends Component {
-
   constructor(props) {
     super(props);
-    const storedMessage = localStorage.getItem('successMessage');
-    let successMessage = '';
-    if(storedMessage) {
+    const storedMessage = localStorage.getItem("successMessage");
+    let successMessage = "";
+    if (storedMessage) {
       successMessage = storedMessage;
-      localStorage.removeItem('successMessage');
+      localStorage.removeItem("successMessage");
     }
     this.state = {
       redirect: false,
       errors: {},
       successMessage,
       user: {
-        username: '',
-        password: ''
+        username: "",
+        password: ""
       }
     };
     this.processForm = this.processForm.bind(this);
@@ -33,12 +32,12 @@ class LoginPage extends Component {
     const formData = `username=${username}&password=${password}`;
 
     const xhr = new XMLHttpRequest();
-    xhr.open('post', `https://omnicodersapi.codehesion.tech/login`);
-    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-    xhr.responseType = 'json';
-    xhr.addEventListener('load', () => {
+    xhr.open("post", `https://omnicodersapi.codehesion.tech/login`);
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhr.responseType = "json";
+    xhr.addEventListener("load", () => {
       if (xhr.status === 200) {
-        Auth.authenticateUser(xhr.response.token);       
+        Auth.authenticateUser(xhr.response.token);
         this.props.loginCurrentUser();
         this.setState({
           redirect: true,
@@ -52,7 +51,7 @@ class LoginPage extends Component {
         });
       }
     });
-    xhr.send(formData);    
+    xhr.send(formData);
   }
 
   changeUser(e) {
@@ -66,7 +65,9 @@ class LoginPage extends Component {
   }
 
   render() {
-    if(this.state.redirect){ return( <Redirect to="/profile" /> ) }
+    if (this.state.redirect) {
+      return <Redirect to="/profile" />;
+    }
     return (
       <div className="container-fluid">
         <div className="row mt-3">
@@ -76,50 +77,67 @@ class LoginPage extends Component {
                 <h4 className="card-title mb-0">Login</h4>
               </div>
               <div className="card-body">
-                <form onSubmit={ this.processForm }>
-                  {this.state.successMessage && <div className="alert alert-success">{ this.state.successMessage }</div>}
-                  {this.state.errors.summary && <div className="alert alert-danger">{ this.state.errors.summary }</div>}
+                <form onSubmit={this.processForm}>
+                  {this.state.successMessage && (
+                    <div className="alert alert-success">
+                      {this.state.successMessage}
+                    </div>
+                  )}
+                  {this.state.errors.summary && (
+                    <div className="alert alert-danger">
+                      {this.state.errors.summary}
+                    </div>
+                  )}
                   <div className="form-group">
                     <label htmlFor="username">Username</label>
-                    <input 
-                      type="text" 
-                      name="username" 
-                      className="form-control" 
-                      onChange={ this.changeUser } 
-                      value={ this.state.user.username }
-                      placeholder="username" 
+                    <input
+                      type="text"
+                      name="username"
+                      className="form-control"
+                      onChange={this.changeUser}
+                      value={this.state.user.username}
+                      placeholder="username"
                     />
-                    {this.state.errors.username && <small className="text-danger">{this.state.errors.username}</small>}
+                    {this.state.errors.username && (
+                      <small className="text-danger">
+                        {this.state.errors.username}
+                      </small>
+                    )}
                   </div>
                   <div className="form-group">
                     <label htmlFor="password">Password</label>
-                    <input 
-                      type="password" 
-                      name="password" 
-                      className="form-control" 
-                      onChange={ this.changeUser } 
-                      value={ this.state.user.password }
-                      placeholder="password"  
+                    <input
+                      type="password"
+                      name="password"
+                      className="form-control"
+                      onChange={this.changeUser}
+                      value={this.state.user.password}
+                      placeholder="password"
                     />
-                    {this.state.errors.password && <small className="text-danger">{this.state.errors.password}</small>}
+                    {this.state.errors.password && (
+                      <small className="text-danger">
+                        {this.state.errors.password}
+                      </small>
+                    )}
                   </div>
                   <div className="form-group text-center">
                     <button type="submit" className="btn btn-success mt-3">
                       Login
                     </button>
-                  </div>                    
+                  </div>
                 </form>
               </div>
               <ul className="list-group list-group-flush">
-                <Link 
+                <Link
                   className="list-group-item list-group-item-action bg-primary text-light"
                   to="/signup"
-                >Sign Up</Link>
+                >
+                  Sign Up
+                </Link>
               </ul>
             </div>
           </div>
         </div>
-
       </div>
     );
   }
